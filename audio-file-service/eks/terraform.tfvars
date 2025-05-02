@@ -3,7 +3,7 @@
 
 additional_security_group_ids         = ["EXAMPLE_SECURITY_GROUP_ID"]
 aws_profile                           = "default"
-cluster_name                          = "waymark"
+cluster_name                          = "EXAMPLE_CLUSTER"
 cpu_instance_type                     = "t3.xlarge"
 desired_count_cpu_nodes               = "1"
 desired_count_gpu_nodes               = "1"
