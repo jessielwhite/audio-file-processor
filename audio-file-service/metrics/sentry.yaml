@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sentry-service
+  namespace: default
+  labels:
+    app: sentry
+spec:
+  type: LoadBalancer
+  selector:
+    app: sentry
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 9000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sentry-deployment
+  namespace: default
+  labels:
+    app: sentry
+spec:
+  replicas: 1
+  revisionHistoryLimit: 0
+  selector:
+    matchLabels:
+      app: sentry
+  template:
+    metadata:
+      labels:
+        app: sentry
+    spec:
+      containers:
+        - image: ADD_REGISTRY_URL/sentry:latest
+          imagePullPolicy: Always
+          name: sentry-container
+          ports:
+            - containerPort: 9000
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "250m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"

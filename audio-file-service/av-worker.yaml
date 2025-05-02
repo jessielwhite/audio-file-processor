@@ -1,0 +1,64 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: av-worker-service
+  namespace: default
+  labels:
+    app: av-worker
+spec:
+  type: LoadBalancer
+  selector:
+    app: av-worker
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: av-worker-deployment
+  namespace: default
+  labels:
+    app: av-worker
+spec:
+  replicas: 1
+  revisionHistoryLimit: 0
+  selector:
+    matchLabels:
+      app: av-worker
+  template:
+    metadata:
+      labels:
+        app: av-worker
+    spec:
+      containers:
+        - env:
+          - name: AWS_ACCESS_KEY
+            value: ADD_ACCESS_KEY
+          - name: AWS_SECRET_KEY
+            value: ADD_SECRET_KEY
+          - name: BUCKET_NAME
+            value: ADD_BUCKET_NAME
+          - name: REDIS_CACHE_TIMEOUT
+            value: "3600"
+          - name: REDIS_DB
+            value: "0"
+          - name: REDIS_HOST
+            value: ADD_REDIS_HOST
+          - name: REDIS_PASSWORD
+            value: ADD_REDIS_PASSWORD
+          - name: REDIS_PORT
+            value: "6379"
+          image: ADD_REGISTRY_URL/av-worker:latest
+          imagePullPolicy: Always
+          name: av-worker-container
+          ports:
+            - containerPort: 8000
+          resources:
+            limits:
+              nvidia.com/gpu: "1" # requesting 1 GPU
+      tolerations:
+      - key: nvidia.com/gpu
+        operator: Exists
+        effect: NoSchedule
