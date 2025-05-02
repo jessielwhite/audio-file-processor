@@ -1,0 +1,8 @@
+flask
+boto3
+requests
+sqlalchemy
+Werkzeug
+celery[redis]
+redis
+python-dotenv
