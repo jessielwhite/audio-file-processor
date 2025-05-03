@@ -6,26 +6,29 @@ This project provides IaC and code snippets to illustrate how a voiceover proces
 
 The included Makefile provides examples for spinning up an NVIDIA GPU-ready EKS cluster, applying Kubernetes deployments, and building and pushing Docker images to an ECR registry.
 
-### api
+### API
 
 The API provides a simple API interface for handling voiceover uploads and their processing. The GET and POST `/voiceover` endpoints allow for uploading voiceover files, monitoring their progress, and accessing processed/converted audio files and variable quality proxies. Presumably, the API would later include endpoints related to bouncing final videos, which would involve rendering a final video along with the voiceover audio.
 
-### av-worker
+### App
+
+The App container spins up a simple TypeScript client for uploading/downloading voiceovers and viewing their progress.
+
+### AV Worker
 
 The AV Worker contains the Celery job definition where all of the processing happens. The heavy lifting is done with FFMPEG, which has GPU access thanks to the CUDA support of NVIDIA GPU-ready EKS nodes.
 
-### flower
+### Flower
 
 The Flower container spins up an instance of Celery Flower for monitoring and manipulating audio processing jobs.
 
-### grafana
+### Observability and Telemetry
+
+#### Grafana
 
 The Grafana container spins up a Grafana instance for insights.
 
-### sentry
+#### Sentry
 
 The Sentry container spins up a Sentry instance for exception reporting.
 
-### app
-
-The App container spins up a simple TypeScript client for uploading/downloading voiceovers and viewing their progress.
