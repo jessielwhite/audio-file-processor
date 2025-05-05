@@ -1,0 +1,3 @@
+# Dependency management
+*.env
+*audio-file-service/__pycache__

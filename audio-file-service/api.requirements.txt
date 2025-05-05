@@ -6,3 +6,4 @@ Werkzeug
 celery[redis]
 redis
 python-dotenv
+prometheus_client

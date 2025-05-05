@@ -4,6 +4,7 @@ from werkzeug.utils import secure_filename
 from celery import Celery
 import os
 import boto3
+import prometheus_client
 from botocore.exceptions import NoCredentialsError
 from uuid import uuid4
 
@@ -110,4 +111,3 @@ def get_voiceover_status(voiceover_id):
 
 if __name__ == '__main__':
     app.run(debug=True)
-    
