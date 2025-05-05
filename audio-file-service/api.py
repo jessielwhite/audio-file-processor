@@ -59,12 +59,15 @@ def upload_voiceover():
     video_id = request.form.get('video_id')
     if not video_id:
         return jsonify({'error': 'Missing video_id'}), 400
-
+    
+    ## Sanitize filename
     filename = secure_filename(file.filename)
+
     file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
     file.save(file_path)
 
+    ## Insert new record into Voiceover table
     voiceover = Voiceover(
         video_id=video_id,
         filename=filename,
@@ -80,7 +83,7 @@ def upload_voiceover():
     voiceover.job_id = task_id
     db.session.commit()
 
-    return jsonify({'voiceover_id': voiceover.voiceover_id, 'job_id': job.id}), 201
+    return jsonify({'voiceover_id': voiceover.voiceover_id, 'job_id': task_id}), 201
 
 @app.route('/voiceover/<int:voiceover_id>', methods=['GET'])
 def get_voiceover_status(voiceover_id):
@@ -88,6 +91,7 @@ def get_voiceover_status(voiceover_id):
     if not voiceover:
         return jsonify({'error': 'Voiceover not found'}), 404
     
+    ## Get current status of Celery job
     task = celery.AsyncResult(voiceover.job_id)
     
     if task:

@@ -21,6 +21,9 @@ apply:
 
 ### Docker ###
 
+docker-run:
+	docker run -d --name $(APP) -p 8000:8000
+
 docker-build:
 	docker build --platform linux/amd64 --provenance false -t $(APP) -f $(APP).Dockerfile .
 	
